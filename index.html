@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Joke vs. AI Joke 🎤</title>
+  <meta name="description" content="Can you spot the machine? A comedy club game.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- STAGE CURTAINS -->
+  <div class="curtain curtain-left"></div>
+  <div class="curtain curtain-right"></div>
+  
+  <div class="container">
+
+    <!-- ═══════════ INTRO SCREEN ═══════════ -->
+    <div id="screen-intro" class="screen active">
+      <div class="intro-card">
+        <h1 class="title-main">JOKE VS.<br><span class="title-highlight">AI JOKE</span> 🎤</h1>
+        <p class="subtitle">Can you spot the machine? 5 jokes. Tick tock.</p>
+        
+        <div class="iq-badge">
+          YOUR JOKE IQ: <span id="introIqScore">---</span>
+        </div>
+
+        <button class="btn btn-action" onclick="startLoadingAct()">TAKE THE STAGE →</button>
+        
+        <div class="leaderboard-preview">
+          <h3>🏆 Club Hall of Fame</h3>
+          <div id="leaderboardList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ LOADING SCREEN ═══════════ -->
+    <div id="screen-loading" class="screen">
+      <div class="loading-content">
+        <div class="mic-spinner">🎤</div>
+        <h2>Loading Next Act...</h2>
+        <p>The AI is writing its material in the green room.</p>
+      </div>
+    </div>
+
+    <!-- ═══════════ GAME SCREEN ═══════════ -->
+    <div id="screen-game" class="screen">
+      <!-- HUD -->
+      <div class="hud">
+        <div class="hud-progress">Joke <span id="currentJokeNum">1</span> of 5</div>
+        <div class="hud-score">Score: <span id="currentScore">0</span></div>
+      </div>
+
+      <!-- SPOTLIGHT JOKE CARD -->
+      <div class="joke-card-wrapper" id="jokeCardWrapper">
+        <div class="joke-card">
+          <div class="joke-setup" id="jokeSetup">...</div>
+          <div class="joke-punchline" id="jokePunchline"></div>
+          
+          <div class="timer-container">
+            <svg class="hourglass-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="action-buttons">
+        <button class="btn-guess btn-human" onclick="makeGuess('HUMAN')">👤 HUMAN</button>
+        <button class="btn-guess btn-ai" onclick="makeGuess('AI')">🤖 AI</button>
+      </div>
+      
+      <button class="btn-skip" onclick="skipJoke()">Skip (-5 pts)</button>
+
+      <!-- AUDIENCE METER -->
+      <div class="audience-meter" id="audienceMeter"></div>
+    </div>
+
+    <!-- ═══════════ RESULT OVERLAY ═══════════ -->
+    <div id="overlay-result" class="overlay">
+      <div class="result-card" id="resultCard">
+        <h2 id="resultTitle">CORRECT!</h2>
+        <div class="result-pts" id="resultPts">+15 pts</div>
+        <div class="result-author-badge" id="resultAuthorBadge">Written by HUMAN 👤</div>
+        <div class="result-explanation" id="resultExplanation"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════ GAME OVER SCREEN ═══════════ -->
+    <div id="screen-gameover" class="screen">
+      <div class="gameover-card">
+        <h2 class="go-title">JOKE IQ REPORT</h2>
+        
+        <div class="iq-dial-container">
+          <svg class="iq-dial" viewBox="0 0 100 50">
+            <path class="dial-bg" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke-width="8" stroke-linecap="round"/>
+            <path class="dial-fill" id="iqDialFill" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke-width="8" stroke-linecap="round"/>
+          </svg>
+          <div class="iq-score-display" id="finalIqScore">0</div>
+        </div>
+        
+        <h3 class="classification" id="finalClassification">Not Quite Comedic 😐</h3>
+        
+        <div class="stats-breakdown">
+          <div>Raw Score: <span id="finalRawScore">0</span>/75</div>
+          <div>Human Jokes Found: <span id="finalHumanScore">0</span>/3</div>
+          <div>AI Jokes Found: <span id="finalAiScore">0</span>/2</div>
+        </div>
+
+        <div class="hardest-joke" id="hardestJokeContainer">
+          <h4>🔥 The Toughest Crowd</h4>
+          <p id="hardestJokeText">Loading...</p>
+        </div>
+
+        <div class="go-actions">
+          <button class="btn btn-action" onclick="generateCertificate()">Download Certificate 🖼️</button>
+          <button class="btn btn-primary" onclick="resetToHome()">Play Again 🎭</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Hidden canvas for certificate generation -->
+  <canvas id="certCanvas" width="1080" height="1080" style="display:none;"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
